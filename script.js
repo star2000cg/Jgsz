@@ -1,5 +1,5 @@
 let usedNumbers = new Set();
-let cells = document.querySelectorAll('.cell span');
+let cells = document.querySelectorAll('.cell span'); // 选择 .cell 内的 span 元素
 let generateButton = document.getElementById('generateButton');
 let resetButton = document.getElementById('resetButton');
 let copyButton = document.getElementById('copyButton');
@@ -30,7 +30,7 @@ generateButton.addEventListener('click', () => {
 
     usedNumbers.add(randomNumber);
     const formattedNumber = randomNumber < 10 ? `0${randomNumber}` : randomNumber.toString();
-    cells[currentCellIndex].textContent = formattedNumber;
+    cells[currentCellIndex].textContent = formattedNumber; // 将数字填入当前单元格
     currentCellIndex++;
 
     if (currentCellIndex === cells.length) {
@@ -46,9 +46,9 @@ resetButton.addEventListener('click', () => {
     if (!confirmReset) return;
 
     cells.forEach(cell => {
-        cell.textContent = '';
+        cell.textContent = ''; // 清空所有单元格
     });
-    usedNumbers.clear();
+    usedNumbers.clear(); // 清空已用数字集合
     currentCellIndex = 0;
     predictionText.value = '';
 
@@ -129,4 +129,18 @@ saveButton.addEventListener('click', () => {
 
     const numbers = Array.from(cells).map(cell => cell.textContent || '空').join(' ');
     const prediction = predictionText.value.trim() || '无';
-    const content = `中正九宫数字预测结果：\n${numbers}\n\n客户预测内容：\n${prediction}`
+    const content = `中正九宫数字预测结果：\n${numbers}\n\n客户预测内容：\n${prediction}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `中正九宫数字预测结果_${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const savePath = isMobile ? '手机的“下载”文件夹' : '电脑的“下载”文件夹';
+    alert(`文件已保存为“${a.download}”！\n\n保存路径：${savePath}\n\n请检查您的下载文件夹。`);
+});
