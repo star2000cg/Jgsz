@@ -1,5 +1,5 @@
 let usedNumbers = new Set();
-let cells = document.querySelectorAll('.cell');
+let cells = document.querySelectorAll('.cell span');
 let generateButton = document.getElementById('generateButton');
 let resetButton = document.getElementById('resetButton');
 let copyButton = document.getElementById('copyButton');
@@ -144,14 +144,3 @@ saveButton.addEventListener('click', () => {
     const savePath = isMobile ? '手机的“下载”文件夹' : '电脑的“下载”文件夹';
     alert(`文件已保存为“${a.download}”！\n\n保存路径：${savePath}\n\n请检查您的下载文件夹。`);
 });
-
-// 注册 Service Worker
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/Jgsz/service-worker.js')
-        .then((registration) => {
-            console.log('Service Worker 注册成功，范围：', registration.scope);
-        })
-        .catch((err) => {
-            console.error('Service Worker 注册失败: ', err);
-        });
-}
