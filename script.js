@@ -10,7 +10,7 @@ let currentCellIndex = 0;
 // 获取自定义弹窗元素
 const customModal = document.getElementById('customModal');
 const modalTitle = document.getElementById('modalTitle');
-const modalMessage = document.getElementById('modalMessage");
+const modalMessage = document.getElementById('modalMessage');
 const modalCloseButton = document.getElementById('modalCloseButton');
 
 // 显示自定义弹窗
