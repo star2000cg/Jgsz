@@ -14,43 +14,10 @@ const modalMessage = document.getElementById('modalMessage');
 const modalCloseButton = document.getElementById('modalCloseButton');
 
 // 显示自定义弹窗
-function showModal(title, message, isReset = false) {
+function showModal(title, message) {
     modalTitle.textContent = title;
     modalMessage.textContent = message;
     customModal.style.display = 'flex';
-
-    // 如果是重置操作，显示“确定”按钮
-    if (isReset) {
-        modalCloseButton.textContent = '取消';
-
-        // 清理之前创建的“确定”按钮
-        const existingConfirmButton = document.querySelector('#confirmResetButton');
-        if (existingConfirmButton) {
-            existingConfirmButton.remove(); // 移除之前的按钮
-        }
-
-        // 创建新的“确定”按钮
-        const confirmButton = document.createElement('button');
-        confirmButton.id = 'confirmResetButton'; // 给按钮添加一个唯一的 ID
-        confirmButton.textContent = '确定';
-        confirmButton.style.marginLeft = '10px';
-        confirmButton.addEventListener('click', () => {
-            customModal.style.display = 'none';
-            cells.forEach(cell => {
-                cell.textContent = '';
-            });
-            usedNumbers.clear();
-            currentCellIndex = 0;
-            predictionText.value = '';
-            copyButton.disabled = true;
-            saveButton.disabled = true;
-        });
-
-        // 将新按钮插入到 DOM 中
-        modalCloseButton.insertAdjacentElement('afterend', confirmButton);
-    } else {
-        modalCloseButton.textContent = '关闭';
-    }
 }
 
 // 关闭自定义弹窗
@@ -101,7 +68,34 @@ generateButton.addEventListener('click', () => {
 
 // 重置九宫格
 resetButton.addEventListener('click', () => {
-    showModal('中正九宫数字预测', '确定要重置九宫格吗？', true); // 传递 true，表示是重置操作
+    showModal('中正九宫数字预测', '确定要重置九宫格吗？');
+    modalCloseButton.textContent = '取消';
+
+    // 清理之前创建的“确定”按钮
+    const existingConfirmButton = document.querySelector('#confirmResetButton');
+    if (existingConfirmButton) {
+        existingConfirmButton.remove(); // 移除之前的按钮
+    }
+
+    // 创建新的“确定”按钮
+    const confirmButton = document.createElement('button');
+    confirmButton.id = 'confirmResetButton'; // 给按钮添加一个唯一的 ID
+    confirmButton.textContent = '确定';
+    confirmButton.style.marginLeft = '10px';
+    confirmButton.addEventListener('click', () => {
+        customModal.style.display = 'none';
+        cells.forEach(cell => {
+            cell.textContent = '';
+        });
+        usedNumbers.clear();
+        currentCellIndex = 0;
+        predictionText.value = '';
+        copyButton.disabled = true;
+        saveButton.disabled = true;
+    });
+
+    // 将新按钮插入到 DOM 中
+    modalCloseButton.insertAdjacentElement('afterend', confirmButton);
 });
 
 // 复制数字到剪贴板
