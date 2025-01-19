@@ -1,128 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中正九宫数字预测</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-
-        .container {
-            text-align: center;
-            width: 340px; /* 固定宽度，与九宫格一致 */
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow-y: auto; /* 允许内容滚动 */
-            max-height: 90vh; /* 限制容器高度 */
-        }
-
-        h1 {
-            margin: 10px 0; /* 调整标题的上下间距 */
-            color: #007bff;
-            font-size: 24px;
-        }
-
-        .instructions {
-            text-align: left;
-            margin-top: 20px; /* 调整操作说明的位置 */
-            padding: 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .instructions h2 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .instructions p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            grid-template-rows: repeat(3, 100px);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .cell {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #000;
-            font-size: 24px;
-            font-weight: bold;
-            background-color: #fff;
-        }
-
-        .prediction-input {
-            margin-bottom: 20px;
-            width: 100%; /* 输入框宽度与九宫格一致 */
-        }
-
-        .prediction-input textarea {
-            width: 100%;
-            height: 80px;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            resize: none;
-            box-sizing: border-box; /* 包含 padding 和 border */
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px; /* 调整按钮与操作说明的间距 */
-            width: 100%; /* 按钮宽度与九宫格一致 */
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            transition: background-color 0.3s ease;
-            flex: 1; /* 按钮平均分配宽度 */
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preload" href="icon-192x192.png" as="image">
+    <link rel="preload" href="icon-512x512.png" as="image">
+    <!-- Polyfill for older browsers -->
+    <script src="https://cdn.jsdelivr.net/npm/core-js-bundle@3.25.5/minified.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.11/runtime.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- 主标题 -->
         <h1>中正九宫数字预测</h1>
-        <!-- 九宫格 -->
         <div class="grid">
             <div class="cell" id="cell1"></div>
             <div class="cell" id="cell2"></div>
@@ -134,161 +26,26 @@
             <div class="cell" id="cell8"></div>
             <div class="cell" id="cell9"></div>
         </div>
-        <!-- 客户预测内容输入 -->
         <div class="prediction-input">
             <textarea id="predictionText" placeholder="请输入您的预测内容..."></textarea>
         </div>
-        <!-- 按钮 -->
         <div class="buttons">
             <button id="generateButton">生成数字</button>
             <button id="resetButton">重置</button>
             <button id="copyButton">复制数字</button>
             <button id="saveButton">保存结果</button>
         </div>
-        <!-- 操作说明 -->
         <div class="instructions">
             <h2>操作说明</h2>
-            <p>1. 点击“生成数字”按钮，系统会随机生成一个 1~64 之间的数字，并依次填充到九宫格中。</p>
-            <p>2. 每个数字只会出现一次，九宫格填满后无法继续生成数字。</p>
-            <p>3. 点击“重置”按钮，可以清空九宫格并重新开始。</p>
-            <p>4. 点击“复制数字”按钮，可以将九宫格中的数字复制到剪贴板。</p>
-            <p>5. 点击“保存结果”按钮，可以将九宫格中的数字保存为文本文件。</p>
+            <p>1. 首先填写预测内容（默认是想要预测的事情）。</p>
+            <p>2. 在点按“生成数字”按钮时，需专注于所想预测之事。</p>
+            <p>3. 点击“生成数字”按钮，系统会随机生成一个 1~64 之间的数字，并依次填充到九宫格中。</p>
+            <p>4. 每个数字只会出现一次，九宫格填满后无法继续生成数字。</p>
+            <p>5. 点击“重置”按钮，可以清空九宫格并重新开始。</p>
+            <p>6. 点击“复制数字”按钮，可以将九宫格中的数字复制到剪贴板。</p>
+            <p>7. 点击“保存结果”按钮，可以将九宫格中的数字保存为文本文件。</p>
         </div>
     </div>
-    <script>
-        let usedNumbers = new Set();
-        let cells = document.querySelectorAll('.cell');
-        let generateButton = document.getElementById('generateButton');
-        let resetButton = document.getElementById('resetButton');
-        let copyButton = document.getElementById('copyButton');
-        let saveButton = document.getElementById('saveButton');
-        let predictionText = document.getElementById('predictionText');
-        let currentCellIndex = 0;
-
-        // 生成随机数字（固定范围：1~64）
-        generateButton.addEventListener('click', () => {
-            if (currentCellIndex < cells.length) {
-                let randomNumber;
-                do {
-                    randomNumber = Math.floor(Math.random() * 64) + 1; // 生成 1~64 的随机数
-                } while (usedNumbers.has(randomNumber)); // 确保数字不重复
-
-                usedNumbers.add(randomNumber); // 将生成的数字添加到已用数字集合中
-
-                // 对 10 以下的数字补零
-                const formattedNumber = randomNumber < 10 ? `0${randomNumber}` : randomNumber.toString();
-                cells[currentCellIndex].textContent = formattedNumber; // 将数字填充到当前格子
-                currentCellIndex++; // 移动到下一个格子
-
-                // 如果九宫格填满，启用复制和保存按钮
-                if (currentCellIndex === cells.length) {
-                    copyButton.disabled = false;
-                    saveButton.disabled = false;
-                    alert('九宫格已填满！您可以复制或保存结果。'); // 提示用户
-                }
-            } else {
-                alert('九宫格已填满！请点击“重置”按钮重新开始。'); // 提示用户九宫格已满
-            }
-        });
-
-        // 重置九宫格
-        resetButton.addEventListener('click', () => {
-            cells.forEach(cell => {
-                cell.textContent = ''; // 清空所有格子
-            });
-            usedNumbers.clear(); // 清空已用数字集合
-            currentCellIndex = 0; // 重置当前格子索引
-            predictionText.value = ''; // 清空预测内容
-
-            // 重置后禁用复制和保存按钮
-            copyButton.disabled = true;
-            saveButton.disabled = true;
-        });
-
-        // 复制数字到剪贴板
-        copyButton.addEventListener('click', () => {
-            const numbers = Array.from(cells).map(cell => cell.textContent || '空');
-            const formattedNumbers = [
-                numbers.slice(0, 3).join(' '), // 第一行
-                numbers.slice(3, 6).join(' '), // 第二行
-                numbers.slice(6, 9).join(' ')  // 第三行
-            ].join('\n'); // 用换行符连接三行
-
-            const now = new Date();
-            const timeString = now.toLocaleString(); // 获取当前时间
-            const prediction = predictionText.value.trim(); // 获取客户输入的预测内容
-
-            const copyText = `中正九宫数字预测结果：\n${formattedNumbers}\n\n客户预测内容：\n${prediction}\n\n生成时间：${timeString}`;
-
-            // 尝试使用现代剪贴板 API
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(copyText)
-                    .then(() => {
-                        alert('已复制到剪贴板：\n' + copyText);
-                    })
-                    .catch(() => {
-                        fallbackCopyText(copyText); // 如果失败，使用备用方法
-                    });
-            } else {
-                fallbackCopyText(copyText); // 如果不支持剪贴板 API，使用备用方法
-            }
-        });
-
-        // 备用复制方法
-        function fallbackCopyText(text) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed'; // 避免滚动
-            textArea.style.top = '0';
-            textArea.style.left = '0';
-            textArea.style.width = '2em';
-            textArea.style.height = '2em';
-            textArea.style.padding = '0';
-            textArea.style.border = 'none';
-            textArea.style.outline = 'none';
-            textArea.style.boxShadow = 'none';
-            textArea.style.background = 'transparent';
-            document.body.appendChild(textArea);
-            textArea.select();
-
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    alert('已复制到剪贴板：\n' + text);
-                } else {
-                    alert('复制失败，请手动复制以下内容：\n' + text);
-                }
-            } catch (err) {
-                alert('复制失败，请手动复制以下内容：\n' + text);
-            } finally {
-                document.body.removeChild(textArea); // 清理 DOM
-            }
-        }
-
-        // 保存结果到文件
-        saveButton.addEventListener('click', () => {
-            const numbers = Array.from(cells).map(cell => cell.textContent || '空').join(' ');
-            const prediction = predictionText.value.trim();
-            const content = `中正九宫数字预测结果：\n${numbers}\n\n客户预测内容：\n${prediction}`;
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '中正九宫数字预测结果.txt';
-            document.body.appendChild(a); // 将链接添加到 DOM 中
-            a.click(); // 触发下载
-            document.body.removeChild(a); // 移除链接
-            URL.revokeObjectURL(url); // 释放 URL 对象
-
-            // 提示用户文件保存的位置
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const savePath = isMobile ? '手机的“下载”文件夹' : '电脑的“下载”文件夹';
-            alert(`文件已保存为“中正九宫数字预测结果.txt”！\n\n保存路径：${savePath}\n\n请检查您的下载文件夹。`);
-        });
-
-        // 初始化时禁用复制和保存按钮
-        copyButton.disabled = true;
-        saveButton.disabled = true;
-    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
