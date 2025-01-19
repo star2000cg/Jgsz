@@ -129,18 +129,4 @@ saveButton.addEventListener('click', () => {
 
     const numbers = Array.from(cells).map(cell => cell.textContent || '空').join(' ');
     const prediction = predictionText.value.trim() || '无';
-    const content = `中正九宫数字预测结果：\n${numbers}\n\n客户预测内容：\n${prediction}`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `中正九宫数字预测结果_${new Date().toISOString().slice(0, 10)}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const savePath = isMobile ? '手机的“下载”文件夹' : '电脑的“下载”文件夹';
-    alert(`文件已保存为“${a.download}”！\n\n保存路径：${savePath}\n\n请检查您的下载文件夹。`);
-});
+    const content = `中正九宫数字预测结果：\n${numbers}\n\n客户预测内容：\n${prediction}`
