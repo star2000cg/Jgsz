@@ -1,34 +1,47 @@
-﻿body {
+:root {
+    --primary-color: #007bff;
+    --hover-color: #0056b3;
+    --disabled-color: #ccc;
+    --background-color: #f0f0f0;
+    --card-background: #fff;
+    --border-color: #ddd;
+}
+
+body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: var(--background-color);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .container {
     text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--card-background);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
 h1 {
-    margin-bottom: 20px;
-    color: #007bff;
+    margin: 10px 0;
+    color: var(--primary-color);
+    font-size: 24px;
 }
 
 .instructions {
     text-align: left;
-    margin-bottom: 20px;
+    margin-top: 20px;
     padding: 15px;
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
 }
 
@@ -46,8 +59,7 @@ h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-bottom: 20px;
 }
@@ -59,13 +71,39 @@ h1 {
     border: 2px solid #000;
     font-size: 24px;
     font-weight: bold;
-    background-color: #fff;
+    background-color: var(--card-background);
+    aspect-ratio: 1;
+}
+
+.cell:hover {
+    background-color: var(--background-color);
+    cursor: pointer;
+}
+
+.prediction-input {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.prediction-input textarea {
+    width: 100%;
+    height: 80px;
+    min-height: 80px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    resize: none;
+    box-sizing: border-box;
 }
 
 .buttons {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 button {
@@ -74,16 +112,41 @@ button {
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: #fff;
     transition: background-color 0.3s ease;
+    flex: 1 1 45%;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: var(--hover-color);
 }
 
 button:disabled {
-    background-color: #ccc;
+    background-color: var(--disabled-color);
     cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .instructions h2 {
+        font-size: 16px;
+    }
+
+    .instructions p {
+        font-size: 12px;
+    }
+
+    .cell {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+        flex: 1 1 100%;
+    }
 }
