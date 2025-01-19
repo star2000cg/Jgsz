@@ -77,7 +77,8 @@ h1 {
     font-size: var(--font-size-large);
     font-weight: bold;
     background-color: var(--card-background);
-    aspect-ratio: 1; /* 1:1 宽高比 */
+    height: 0;
+    padding-top: 100%; /* 实现 1:1 宽高比 */
     position: relative;
 }
 
