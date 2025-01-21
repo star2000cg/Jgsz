@@ -78,7 +78,10 @@ self.addEventListener('fetch', (event) => {
             })
             .catch(() => {
               // 如果网络请求失败，返回离线页面
-              return caches.match('/offline.html');
+              if (event.request.mode === 'navigate') {
+                return caches.match('/offline.html');
+              }
+              return new Response('网络连接失败，请检查网络后重试。');
             });
         })
     );
