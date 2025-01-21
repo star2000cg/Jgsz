@@ -1,4 +1,4 @@
-const CACHE_NAME = '中正九宫数字预测-v2'; // 更新版本号
+const CACHE_NAME = '中正九宫数字预测-v3'; // 更新版本号
 const ASSETS_TO_CACHE = [
   '/', // 缓存根路径
   '/index.html', // 缓存首页
@@ -14,10 +14,16 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('缓存资源:', ASSETS_TO_CACHE);
+        console.log('正在缓存资源:', ASSETS_TO_CACHE);
         return cache.addAll(ASSETS_TO_CACHE);
       })
-      .then(() => self.skipWaiting()) // 强制激活新的 Service Worker
+      .then(() => {
+        console.log('资源缓存完成');
+        return self.skipWaiting(); // 强制激活新的 Service Worker
+      })
+      .catch((err) => {
+        console.error('资源缓存失败:', err);
+      })
   );
 });
 
@@ -33,7 +39,10 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-    }).then(() => self.clients.claim()) // 立即控制所有客户端
+    }).then(() => {
+      console.log('Service Worker 激活完成');
+      return self.clients.claim(); // 立即控制所有客户端
+    })
   );
 });
 
@@ -50,17 +59,21 @@ self.addEventListener('fetch', (event) => {
             console.log('从缓存中返回:', event.request.url);
             return response; // 返回缓存内容
           }
-          return fetch(event.request) // 否则从网络请求
+
+          // 动态缓存新请求
+          return fetch(event.request)
             .then((fetchResponse) => {
-              if (!fetchResponse || fetchResponse.status !== 200) {
-                return fetchResponse;
+              if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
+                return fetchResponse; // 只缓存成功的响应
               }
-              // 动态缓存新请求
+
               const responseToCache = fetchResponse.clone();
               caches.open(CACHE_NAME)
                 .then((cache) => {
                   cache.put(event.request, responseToCache);
+                  console.log('动态缓存新请求:', event.request.url);
                 });
+
               return fetchResponse;
             })
             .catch(() => {
