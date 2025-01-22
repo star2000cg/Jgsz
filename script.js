@@ -188,7 +188,7 @@ function fallbackCopyText(text) {
 }
 
 // 保存结果到文件
-saveButton.addEventListener("click", async () => {
+saveButton.addEventListener("click", () => {
   if (currentCellIndex === 0) {
     showModal("中正九宫数字预测", "没有数字可以保存！");
     return;
@@ -207,52 +207,27 @@ saveButton.addEventListener("click", async () => {
 
   const content = `中正九宫数字预测结果：\n${numbers}\n\n数字总和：${sum}\n\n客户预测内容：\n${prediction}`;
 
-  // 检查浏览器是否支持 File System Access API
-  if ("showSaveFilePicker" in window) {
-    try {
-      // 使用 File System Access API 保存文件
-      const handle = await window.showSaveFilePicker({
-        suggestedName: `中正九宫数字预测结果_${new Date().toISOString().slice(0, 10)}.txt`,
-        types: [
-          {
-            description: "文本文件",
-            accept: { "text/plain": [".txt"] },
-          },
-        ],
-      });
+  // 创建 Blob 对象
+  const blob = new Blob([content], { type: "text/plain" });
 
-      const writable = await handle.createWritable();
-      await writable.write(content);
-      await writable.close();
+  // 使用 Blob URL 触发下载
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `中正九宫数字预测结果_${new Date().toISOString().slice(0, 10)}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 
-      showModal("中正九宫数字预测", "文件已保存，请检查您选择的路径。");
-    } catch (err) {
-      console.error("文件保存失败:", err);
-      showModal("中正九宫数字预测", "文件保存失败，请重试。");
-    }
-  } else {
-    // 如果不支持 File System Access API，使用传统的下载方式
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `中正九宫数字预测结果_${new Date().toISOString().slice(0, 10)}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    showModal(
-      "中正九宫数字预测",
-      "文件已保存到默认下载文件夹。您可以通过浏览器的下载管理器选择保存路径。"
-    );
-  }
+  // 提示用户下载成功
+  showModal("中正九宫数字预测", "文件已保存，请检查您的下载文件夹。如果下载失败，请尝试使用 Chrome 或 Edge 浏览器。");
 });
 
 // 注册 Service Worker
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register("/Jgsz/service-worker.js")
+    .register("/service-worker.js")
     .then((registration) => {
       console.log("Service Worker 注册成功，范围：", registration.scope);
     })
