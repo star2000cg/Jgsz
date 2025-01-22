@@ -188,7 +188,7 @@ function fallbackCopyText(text) {
 }
 
 // 保存结果到文件
-saveButton.addEventListener("click", () => {
+saveButton.addEventListener("click", async () => {
   if (currentCellIndex === 0) {
     showModal("中正九宫数字预测", "没有数字可以保存！");
     return;
@@ -207,45 +207,31 @@ saveButton.addEventListener("click", () => {
 
   const content = `中正九宫数字预测结果：\n${numbers}\n\n数字总和：${sum}\n\n客户预测内容：\n${prediction}`;
 
-  // 显示自定义弹窗，提供“取消”和“下载”选项
-  showSaveModal(content);
-});
+  // 检查浏览器是否支持 File System Access API
+  if ("showSaveFilePicker" in window) {
+    try {
+      // 使用 File System Access API 保存文件
+      const handle = await window.showSaveFilePicker({
+        suggestedName: `中正九宫数字预测结果_${new Date().toISOString().slice(0, 10)}.txt`,
+        types: [
+          {
+            description: "文本文件",
+            accept: { "text/plain": [".txt"] },
+          },
+        ],
+      });
 
-// 显示保存文件的弹窗
-function showSaveModal(content) {
-  const saveModal = document.createElement("div");
-  saveModal.className = "modal";
-  saveModal.innerHTML = `
-    <div class="modal-content">
-      <h2>保存文件</h2>
-      <p>您确定要下载文件吗？</p>
-      <div class="modal-buttons">
-        <button id="cancelSaveButton">取消</button>
-        <button id="confirmSaveButton">下载</button>
-      </div>
-    </div>
-  `;
+      const writable = await handle.createWritable();
+      await writable.write(content);
+      await writable.close();
 
-  // 将弹窗添加到页面
-  document.body.appendChild(saveModal);
-
-  // 显示弹窗
-  saveModal.style.display = "flex";
-
-  // 取消按钮
-  const cancelSaveButton = document.getElementById("cancelSaveButton");
-  cancelSaveButton.addEventListener("click", () => {
-    saveModal.style.display = "none";
-    document.body.removeChild(saveModal);
-  });
-
-  // 下载按钮
-  const confirmSaveButton = document.getElementById("confirmSaveButton");
-  confirmSaveButton.addEventListener("click", () => {
-    saveModal.style.display = "none";
-    document.body.removeChild(saveModal);
-
-    // 创建 Blob 并触发下载
+      showModal("中正九宫数字预测", "文件已保存，请检查您选择的路径。");
+    } catch (err) {
+      console.error("文件保存失败:", err);
+      showModal("中正九宫数字预测", "文件保存失败，请重试。");
+    }
+  } else {
+    // 如果不支持 File System Access API，使用传统的下载方式
     const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -256,10 +242,12 @@ function showSaveModal(content) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    // 提示用户下载成功
-    showModal("中正九宫数字预测", "文件已保存，请检查您的下载文件夹。");
-  });
-}
+    showModal(
+      "中正九宫数字预测",
+      "文件已保存到默认下载文件夹。您可以通过浏览器的下载管理器选择保存路径。"
+    );
+  }
+});
 
 // 注册 Service Worker
 if ("serviceWorker" in navigator) {
