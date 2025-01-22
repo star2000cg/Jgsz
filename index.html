@@ -5,12 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中正九宫数字预测</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="preload" href="icon-192x192.png" as="image">
-    <link rel="preload" href="icon-512x512.png" as="image">
-    <!-- Polyfill for older browsers -->
-    <script src="https://cdn.jsdelivr.net/npm/core-js-bundle@3.25.5/minified.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.11/runtime.js"></script>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="icon-192x192.png">
 </head>
 <body>
     <div class="container">
@@ -26,15 +22,21 @@
             <div class="cell" id="cell8"></div>
             <div class="cell" id="cell9"></div>
         </div>
+
+        <!-- 预测内容输入框 -->
         <div class="prediction-input">
             <textarea id="predictionText" placeholder="请输入您的预测内容..."></textarea>
         </div>
+
+        <!-- 操作按钮 -->
         <div class="buttons">
             <button id="generateButton">生成数字</button>
             <button id="resetButton">重置</button>
             <button id="copyButton">复制数字</button>
             <button id="saveButton">保存结果</button>
         </div>
+
+        <!-- 操作说明 -->
         <div class="instructions">
             <h2>操作说明</h2>
             <p>1. 首先填写预测内容（默认是想要预测的事情）。</p>
